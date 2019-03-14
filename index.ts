@@ -21,7 +21,7 @@ registerPlugin({
       http.simpleRequest({
         url: `https://www.gametracker.com/server_info/cg.civilservers.net:${port}`
       }, (err, res) => {
-        if (err) {
+        if (err || res!.statusCode !== 200) {
           return target.chat(`Couldn't get number of players for ${serverName}: ${err}`);
         }
         // this environment would scream if I tried to use a proper DOM library, so gross regex is my only resort
