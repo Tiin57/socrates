@@ -10,6 +10,10 @@ registerPlugin({
   const commands = {
     players: (message: Message, args: string[]) => {
       message.client.chat("Hello! " + JSON.stringify(args));
+    },
+    reload: (message: Message) => {
+      message.channel.chat(`User ${message.client.nick()} (${message.client.databaseID()}) requested a reload.`);
+      engine.reloadScripts();
     }
   };
   const commandPrefixes = Object.keys(commands) as (keyof typeof commands)[];
