@@ -108,7 +108,7 @@ declare enum ChannelType {
 
 interface Message {
   text: string;
-  channel: Channel;
+  channel?: Channel;
   client: Client;
   mode: MessageMode;
 }

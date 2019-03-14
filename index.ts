@@ -8,11 +8,17 @@ registerPlugin({
   const event = require("event");
   const commandPrefix = engine.getCommandPrefix();
   const commands = {
-    players: (message: Message, args: string[]) => {
-      message.client.chat("Hello! " + JSON.stringify(args));
+    me: ({ client }: Message) => {
+      client.chat(`Your information:\nUnique ID: ${client.uid()}\nDatabase ID: ${client.databaseID()}\nTemporary ID: ${client.id()}`);
     },
-    reload: (message: Message) => {
-      message.channel.chat(`User ${message.client.nick()} (${message.client.databaseID()}) requested a reload.`);
+    players: ({ client }: Message, args: string[]) => {
+      client.chat("Hello! " + JSON.stringify(args));
+    },
+    reload: ({ channel, client }: Message) => {
+      if (client.databaseID() !== "110890") {
+        return client.chat("You are not authorized to reload.");
+      }
+      (channel || client).chat(`User ${client.nick()} (${client.databaseID()}) requested a reload.`);
       engine.reloadScripts();
     }
   };
