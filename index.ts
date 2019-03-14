@@ -75,7 +75,7 @@ registerPlugin({
     )[0];
     if (!prefix) return;
     const prefixTokenCount = prefix.split(" ").length; // prefix could have spaces, I guess
-    const args = message.text.split(" ").slice(prefixTokenCount);
+    const args = message.text.replace(/\[\/?URL\]/gi, "").split(" ").slice(prefixTokenCount);
     return (commands[prefix])(message, message.channel || message.client, args);
   });
 });
