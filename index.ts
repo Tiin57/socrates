@@ -49,11 +49,12 @@ registerPlugin({
       const field = args[0].toLowerCase();
       const value = args.slice(1).join(" ");
       switch (field) {
+        case "desc":
         case "description":
           bot.setDescription(value);
           break;
-        case "nickname":
         case "nick":
+        case "nickname":
           engine.setNick(value);
           break;
         default:
