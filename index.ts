@@ -13,9 +13,9 @@ registerPlugin({
     me: ({ client }: Message) => {
       client.chat(`Your information:\nUnique ID: ${client.uniqueId()}\nDatabase ID: ${client.databaseID()}\nTemporary ID: ${client.id()}`);
     },
-    players: ({ channel, client }: Message, [serverName]: string[]) => {
+    players: ({ channel, client }: Message, args: string[]) => {
       const target = channel || client;
-      serverName = ["civilcity", "cityrp", "cc"].some(n => n === serverName.toLowerCase())
+      const serverName = ["civilcity", "cityrp", "cc"].some(n => n === (args[0] || "").toLowerCase())
         ? "CityRP" : "DarkRP";
       const port = serverName === "DarkRP" ? 27015 : 27016;
       http.simpleRequest({
