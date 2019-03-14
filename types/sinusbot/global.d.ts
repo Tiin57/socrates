@@ -183,6 +183,7 @@ declare function registerPlugin<Variables extends string = "">(
   ) => void
 ): void;
 
+declare function require(name: "backend"): BackendModule;
 declare function require(name: "engine"): EngineModule;
 declare function require(name: "event"): EventModule;
 declare function require(name: "http"): HttpModule;
