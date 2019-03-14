@@ -141,6 +141,10 @@ interface ServerGroup {
   addPermission(id: string): void;
 }
 
+interface Track { }
+
+interface User { }
+
 interface Manifest<Variables extends string = ""> {
   name: string;
   author: string;
@@ -174,3 +178,6 @@ declare function registerPlugin<Variables extends string = "">(
     manifest: Manifest<Variables>
   ) => void
 ): void;
+
+declare function require(name: "engine"): EngineModule;
+declare function require(name: "event"): EventModule;

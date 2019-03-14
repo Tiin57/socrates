@@ -1,3 +1,3 @@
-declare module "event" {
-  export function on(eventName: "chat", callback: (msg: Message) => void): void;
+interface EventModule {
+  on(eventName: "chat", callback: (msg: Message) => void): void;
 }
