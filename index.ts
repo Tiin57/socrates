@@ -57,6 +57,9 @@ registerPlugin({
         case "nickname":
           engine.setNick(value);
           break;
+        case "avatar":
+          engine.setAvatarFromURL(value);
+          break;
         default:
           return target.chat(`Don't know how to set ${field}.`);
       }
