@@ -1,9 +1,3 @@
-const commands = {
-  players: (message: Message, args: string[]) => {
-    message.client.chat("Hello! " + JSON.stringify(args));
-  }
-};
-
 registerPlugin({
   name: "Socrates",
   author: "Tiin57 <tiin57@gmail.com>",
@@ -13,6 +7,11 @@ registerPlugin({
   const engine = require("engine");
   const event = require("event");
   const commandPrefix = engine.getCommandPrefix();
+  const commands = {
+    players: (message: Message, args: string[]) => {
+      message.client.chat("Hello! " + JSON.stringify(args));
+    }
+  };
   const commandPrefixes = Object.keys(commands) as (keyof typeof commands)[];
   event.on("chat", message => {
     const prefix = commandPrefixes.filter(prefix =>
