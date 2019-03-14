@@ -18,15 +18,14 @@ registerPlugin({
       const serverName = ["civilcity", "cityrp", "cc"].some(n => n === (args[0] || "").toLowerCase())
         ? "CityRP" : "DarkRP";
       const port = serverName === "DarkRP" ? 27015 : 27016;
-      http.simpleRequest({
-        url: `https://www.gametracker.com/server_info/cg.civilservers.net:${port}`
-      }, (err, res) => {
+      const url = `https://www.gametracker.com/server_info/cg.civilservers.net:${port}`;
+      http.simpleRequest({ url }, (err, res) => {
         if (err || res!.statusCode !== 200) {
           return target.chat(`Couldn't get number of players for ${serverName}: ${err}`);
         }
         // this environment would scream if I tried to use a proper DOM library, so gross regex is my only resort
         const count = res!.data.toString().match(/<span id="HTML_num_players">(\d+)<\/span>/)![1];
-        target.chat(`There are ${count} players on ${serverName} right now.`);
+        target.chat(`There are ${count} players on ${serverName} right now. ([URL=${url}]More information[/URL])`);
       });
     },
     reload: ({ client }: Message, target: Channel | Client) => {
@@ -68,7 +67,7 @@ registerPlugin({
   };
 
   const commandPrefixes = Object.keys(commands) as (keyof typeof commands)[];
-  event.on("chat", message => {
+  const onMessage = (message: Message) => {
     const prefix = commandPrefixes.filter(prefix =>
       // ends up looking like /^\~players/
       new RegExp("^\\" + commandPrefix + prefix).test(message.text)
@@ -77,5 +76,7 @@ registerPlugin({
     const prefixTokenCount = prefix.split(" ").length; // prefix could have spaces, I guess
     const args = message.text.replace(/\[\/?URL\]/gi, "").split(" ").slice(prefixTokenCount);
     return (commands[prefix])(message, message.channel || message.client, args);
-  });
+  };
+  event.on("chat", onMessage);
+  event.on("poke", onMessage);
 });
