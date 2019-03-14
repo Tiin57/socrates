@@ -1,3 +1,7 @@
+interface Bytes {
+  toString(): string;
+}
+
 interface Client {
   name(): string;
   nick(): string;
@@ -181,3 +185,4 @@ declare function registerPlugin<Variables extends string = "">(
 
 declare function require(name: "engine"): EngineModule;
 declare function require(name: "event"): EventModule;
+declare function require(name: "http"): HttpModule;

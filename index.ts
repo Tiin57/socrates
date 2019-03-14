@@ -6,13 +6,27 @@ registerPlugin({
 }, (_, config) => {
   const engine = require("engine");
   const event = require("event");
+  const http = require("http");
   const commandPrefix = engine.getCommandPrefix();
+
   const commands = {
     me: ({ client }: Message) => {
-      client.chat(`Your information:\nUnique ID: ${client.uid()}\nDatabase ID: ${client.databaseID()}\nTemporary ID: ${client.id()}`);
+      client.chat(`Your information:\nUnique ID: ${client.uniqueId()}\nDatabase ID: ${client.databaseID()}\nTemporary ID: ${client.id()}`);
     },
-    players: ({ client }: Message, args: string[]) => {
-      client.chat("Hello! " + JSON.stringify(args));
+    players: ({ channel, client }: Message, [serverName]: string[]) => {
+      const target = channel || client;
+      serverName = ["civilcity", "cityrp", "cc"].some(n => n === serverName.toLowerCase())
+        ? "CityRP" : "DarkRP";
+      const port = serverName === "DarkRP" ? 27015 : 27016;
+      http.simpleRequest({
+        url: `https://www.gametracker.com/server_info/cg.civilservers.net:${port}`
+      }, (err, res) => {
+        if (err) {
+          return target.chat(`Couldn't get number of players for ${serverName}: ${err}`);
+        }
+        const count = res!.data.toString().match(/<span id="HTML_num_players">(\d+)<\/span>/)![1];
+        target.chat(`There are ${count} players on ${serverName} right now.`);
+      });
     },
     reload: ({ channel, client }: Message) => {
       if (client.databaseID() !== "110890") {
@@ -22,6 +36,7 @@ registerPlugin({
       engine.reloadScripts();
     }
   };
+
   const commandPrefixes = Object.keys(commands) as (keyof typeof commands)[];
   event.on("chat", message => {
     const prefix = commandPrefixes.filter(prefix =>
