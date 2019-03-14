@@ -75,7 +75,8 @@ registerPlugin({
     if (!prefix) return;
     const prefixTokenCount = prefix.split(" ").length; // prefix could have spaces, I guess
     const args = message.text.replace(/\[\/?URL\]/gi, "").split(" ").slice(prefixTokenCount);
-    return (commands[prefix])(message, message.channel || message.client, args);
+    const target = message.mode === MessageMode.Channel ? message.channel : message.client;
+    return (commands[prefix])(message, target || message.client, args);
   };
   event.on("chat", onMessage);
   event.on("poke", onMessage);
